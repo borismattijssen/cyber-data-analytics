@@ -1,1 +1,2 @@
 imbalanced-learn
+jupyter
