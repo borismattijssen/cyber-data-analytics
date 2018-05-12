@@ -3,22 +3,23 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from imblearn.over_sampling import SMOTE
-from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.linear_model import SGDClassifier as SGD
-from sklearn.metrics import roc_curve
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.metrics import roc_curve, auc
+from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB as GNB
 from sklearn.tree import DecisionTreeClassifier as DTC
+from sklearn.neighbors import KNeighborsClassifier
 
-def draw_roc(clf, X_train, X_test, Y_train, Y_test, color,label):
+def draw_roc(clf, X_train, X_test, Y_train, Y_test, color, label):
     # train classifier
-    clf.fit(X_train,Y_train)
+    clf.fit(X_train, Y_train)
     Y_labels = clf.predict(X_test)
 
     # calculate roc curve
-    fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
+    fpr, tpr, thresholds = roc_curve(Y_test, Y_labels)
+    # compute area under roc curve
+    area =  auc(fpr, tpr)
     # add roc curve in the figure with a different color and a legend label
-    plt.plot(fpr, tpr, color=color, label=label)
+    plt.plot(fpr, tpr, color=color, label=(label+ 'area = {0:0.2f}').format(area))
 
 def draw_rocs(clf, clf_name, X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test):
     fig = plt.figure()
@@ -26,7 +27,8 @@ def draw_rocs(clf, clf_name, X_train, X_smote_train, X_test, Y_train, Y_smote_tr
     draw_roc(clf, X_train, X_test, Y_train, Y_test, 'darkorange','%s UNSMOTEd' % clf_name)
     draw_roc(clf, X_smote_train, X_test, Y_smote_train, Y_test, 'navy','%s SMOTEd' % clf_name)
 
-    #set axis range, title and legend
+    #set axis range, title and legend and dashed line of random guessing classifier
+    plt.plot([0, 1], [0, 1], 'k--', lw=2)
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
@@ -58,7 +60,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.2)
 sm = SMOTE()
 X_smote_train, Y_smote_train = sm.fit_sample(X_train,Y_train)
 
-# draw_rocs(SGD(), 'SGD', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
-draw_rocs(RFC(), 'RFC', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
-draw_rocs(GNB(), 'GNB', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
+# draw ROC curves for Decision Tree Classifier, Gaussian Naive Bayes Classifier and K Nearest Neighbors Classifier
 draw_rocs(DTC(), 'DTC', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
+draw_rocs(GNB(), 'GNB', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
+draw_rocs(KNeighborsClassifier(), 'Kneighbors', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
