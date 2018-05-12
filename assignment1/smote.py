@@ -19,7 +19,7 @@ def draw_roc(clf, X_train, X_test, Y_train, Y_test, color, label):
     # compute area under roc curve
     area =  auc(fpr, tpr)
     # add roc curve in the figure with a different color and a legend label
-    plt.plot(fpr, tpr, color=color, label=(label+ 'area = {0:0.2f}').format(area))
+    plt.plot(fpr, tpr, color=color, label=(label + ' (area = {0:0.2f})').format(area))
 
 def draw_rocs(clf, clf_name, X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test):
     fig = plt.figure()
@@ -63,4 +63,4 @@ X_smote_train, Y_smote_train = sm.fit_sample(X_train,Y_train)
 # draw ROC curves for Decision Tree Classifier, Gaussian Naive Bayes Classifier and K Nearest Neighbors Classifier
 draw_rocs(DTC(), 'DTC', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
 draw_rocs(GNB(), 'GNB', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
-draw_rocs(KNeighborsClassifier(), 'Kneighbors', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
+draw_rocs(KNeighborsClassifier(), '5-NearestNeighbors', X_train, X_smote_train, X_test, Y_train, Y_smote_train, Y_test)
