@@ -1,2 +1,6 @@
+pandas
+sklearn
+matplotlib
+seaborn
+numpy
 imbalanced-learn
-jupyter
