@@ -1,160 +1,61 @@
 #!/usr/bin/python3 
 
 import numpy as np
-from sklearn.metrics import roc_curve
-from imblearn.over_sampling import SMOTE
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.linear_model import SGDClassifier as SGD
-from sklearn.naive_bayes import GaussianNB as GNB
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import f1_score
 from sklearn.tree import DecisionTreeClassifier as DTC
-from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.svm import SVC as SVC
-import matplotlib.pyplot as plt
+from sklearn.ensemble import BaggingClassifier
+
 
 # read .csv file into an array
-data = np.loadtxt('original_data.csv',delimiter=' ')
-
-# simple aggregation based on IP, just adds the total number of transactions of that IP as a feature
-agg = {}
-for item in data:
-    if item[12] in agg.keys():
-        agg[item[12]] = agg[item[12]] + 1
-    else:
-        agg[item[12]] = 1
-
-agg_data = []
-for i in range(data.shape[0]):
-    agg_data.append(np.append(data[i][:-1],agg[data[i][12]]))
+data = np.loadtxt('data/original_data.csv',delimiter=' ')
 
 # separate features from labels for the original and aggregated data sets
-x2 = data[:,:data.shape[1]-2]
-x1 = np.array(agg_data)
+x = data[:,:data.shape[1]-2]
 y = data[:,data.shape[1]-1]
 
 # turn them into arrays
-X = np.asarray(x2,dtype=np.int32)
-X1 = np.asarray(x1,dtype=np.int32)
+X = np.asarray(x,dtype=np.int32)
 Y = np.asarray(y,dtype=np.int32)
 
-# use a random forest classifier with 10-fold cross-validation for both datasets
-clf = RFC()
-scores = cross_val_score(clf, X1,Y , cv=10)
-print(scores)
+# initialize simple classification metrics
+TP = 0
+FP = 0
+FN = 0
+TN = 0
+F1 = 0
+j = 0
 
-clf = RFC()
-scores = cross_val_score(clf, X, Y, cv=10)
-print(scores)
+# threshold where positive class probabilities start to be considered indicative of positive class
+cutoff = 0.1
 
-# perform SMOTE and then repeat the above process
-# it's wrong, needs to separate training and test before using SMOTE
-sm = SMOTE()
-X_res, Y_res = sm.fit_sample(X,Y)
-clf = RFC()
-scores = cross_val_score(clf, X_res, Y_res, cv=10)
-print(scores)
+# prepare for 10-fold stratified cross-validation
+cv = StratifiedKFold(n_splits=10)
 
-sm = SMOTE()
-X_res, Y_res = sm.fit_sample(X1,Y)
-clf = RFC()
-scores = cross_val_score(clf, X_res, Y_res, cv=10)
-print(scores)
+# split each fold into a training and test set
+for train, test in cv.split(X,Y):
+    j += 1
 
-# separate training and test set
-X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.2)
+    # create and train bagging decision tree classifier
+    clf = BaggingClassifier(DTC(), max_samples=0.61, max_features=0.61)
+    clf.fit(X[train],Y[train])
+    # predict classifier labels
+    Y_labels = (clf.predict_proba(X[test])[:,1] > cutoff).astype(int)
 
-# train stochastic gradient descent classifier
-clf = SGD()
-clf.fit(X_train,Y_train)
-Y_labels = clf.predict(X_test)
-
-# calculate roc curve
-fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
-
-# create plot
-plt.figure()
-plt.plot(fpr,tpr,label='ROC curve')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.savefig('RocSGD.png')
-
-# same process for gaussian naive bayes classifier
-clf = GNB()
-clf.fit(X_train,Y_train)
-Y_labels = clf.predict(X_test)
-
-fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
-
-plt.figure()
-plt.plot(fpr,tpr,label='ROC curve')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.savefig('RocGNB.png')
-
-# same for decision tree classifier
-clf = DTC()
-clf.fit(X_train,Y_train)
-Y_labels = clf.predict(X_test)
-
-fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
-
-plt.figure()
-plt.plot(fpr,tpr,label='ROC curve')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.savefig('RocDTC.png')
-# repeat for SMOTED data
-X_train, X_test, Y_train, Y_test = train_test_split(X_res,Y_res,test_size=0.2)
-
-clf = SGD()
-clf.fit(X_train,Y_train)
-Y_labels = clf.predict(X_test)
-
-fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
-
-plt.figure()
-plt.plot(fpr,tpr,label='ROC curve')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.savefig('RocSGDs.png')
-
-clf = GNB()
-clf.fit(X_train,Y_train)
-Y_labels = clf.predict(X_test)
-
-fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
-
-plt.figure()
-plt.plot(fpr,tpr,label='ROC curve')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.savefig('RocGNBs.png')
-
-clf = DTC()
-clf.fit(X_train,Y_train)
-Y_labels = clf.predict(X_test)
-
-fpr, tpr, thresholds = roc_curve(Y_test,Y_labels)
-
-plt.figure()
-plt.plot(fpr,tpr,label='ROC curve')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.savefig('RocDTCs.png')
+    # compute and output simple metrics
+    for i in range(len(Y_labels)):
+        if Y[test][i] == 1 and Y_labels[i] == 1:
+            TP += 1
+        if Y[test][i] == 0 and Y_labels[i] == 1:
+            FP += 1
+        if Y[test][i] == 1 and Y_labels[i] == 0:
+            FN += 1
+        if Y[test][i] == 0 and Y_labels[i] == 0:
+            TN += 1
+    F1 += f1_score(Y[test],Y_labels)
+    print('Iteration: ' + str(j))
+    print('TP: ' + str(TP))
+    print('FP: ' + str(FP))
+    print('FN: ' + str(FN))
+    print('TN: ' + str(TN))
+    print('F1: ' + str(F1/j))
