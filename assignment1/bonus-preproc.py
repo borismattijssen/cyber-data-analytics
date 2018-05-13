@@ -37,4 +37,4 @@ for i in range(df.shape[0]):
 df2 = pd.DataFrame(agg, columns=['issuercountry', 'txvariantcode', 'issuer_id', 'amount', 'currencycode', 'shoppercountry', 'interaction', 'verification', 'cvcresponse', 'creationdate_stamp', 'accountcode', 'mail_id', 'ip_id', 'card_id', 'label', 'mean_amount_per_date', 'mean_amount_per_car', 'mean_amount_per_mail', 'mean_amount_per_ip'])
 
 # save dataset to a new .csv file
-df2.to_csv('data/augemented_data.csv')
+df2.to_csv('data/augmented_data.csv')
