@@ -20,3 +20,6 @@ This folder contains code and data for classifying fraudulent credit card transa
 
 1. Pre-process data: `python bonus-preproc.py`. The augmented data set is stored in `data/augmented_data.csv`.
 2. Run the bonus classifier: `python bonus.py`.
+3. Change to the notebook folder: `cd notebook`.
+4. Start a Jupyter server: `jupyter notebook`.
+4. Open `Bonus.ipynb`.
