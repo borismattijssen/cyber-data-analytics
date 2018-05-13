@@ -7,7 +7,7 @@ This folder contains code and data for classifying fraudulent credit card transa
 
 1. Set up a virtual python environment: `virtualenv -p python2 venv`, `source venv/bin/activate`.
 2. Install python dependencies: `pip install -r requirements.txt`.
-3. Pre-process data: `python fraud_detection.py`. The pre-processed data set is stored in `data/encoded_data.csv`.
+3. (optional) Pre-process data: `python fraud_detection.py`. The pre-processed data set is stored in `data/encoded_data.csv`.
 
 ### WhiteBox & BlackBox classifiers
 
@@ -18,8 +18,7 @@ This folder contains code and data for classifying fraudulent credit card transa
 
 ### Bonus
 
-1. Pre-process data: `python bonus-preproc.py`. The augmented data set is stored in `data/augmented_data.csv`.
-2. Run the bonus classifier: `python bonus.py`.
+1. (optional) Pre-process data: `python bonus-preproc.py`. The augmented data set is stored in `data/augmented_data.csv`.
 3. Change to the notebook folder: `cd notebook`.
 4. Start a Jupyter server: `jupyter notebook`.
 4. Open `Bonus.ipynb`.
