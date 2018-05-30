@@ -151,7 +151,7 @@ if __name__ == "__main__":
         data.append([issuercountry, txvariantcode, issuer_id, amount, currencycode,
                     shoppercountry, interaction, verification, cvcresponse, creationdate_stamp,
                      accountcode, mail_id, ip_id, card_id, label, creationdate])# add the interested features here
-        y.append(label)# add the labels
+        #y.append(label)# add the labels
     data = sorted(data, key = lambda k: k[-1])
     day_aggregate = aggregate(data,'day')
     client_aggregate = aggregate(data,'client')
@@ -215,7 +215,7 @@ for item in x:
 #x_mean = []
 #x_mean = aggregate_mean(x);
 x_mean = x;
-des = 'data/original_data.csv'
+des = 'data/encoded_data.csv'
 des1 = 'data/aggregate_data.csv'
 ch_dfa = open(des,'w')
 # ch_dfa.write('txid,bookingdate,issuercountrycode,txvariantcode,bin,amount,'+
