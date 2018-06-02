@@ -9,13 +9,11 @@ This folder contains code and data for detecting anomalies in a SCADA system. Fo
 2. Install python dependencies: `pip install -r requirements.txt`.
 
 ### 1. Familiarization
-1. Change to the notebook folder: `cd notebook`.
 2. Start a Jupyter server: `jupyter notebook`.
 3. Open `DataExploration.ipynb`.
 
 ### 2. ARMA
 
-1. Change to the notebook folder: `cd notebook`.
 2. Start a Jupyter server: `jupyter notebook`.
 3. The script `nerdalize/arma_tuning.py` can be used to find optimal ARMA parameters for all signals.
 4. Open `ARMA_all_signals.ipynb` to detect anomalies on all signals.
