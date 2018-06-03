@@ -18,3 +18,7 @@ This folder contains code and data for detecting anomalies in a SCADA system. Fo
 2. The script `nerdalize/arma_tuning.py` can be used to find optimal ARMA parameters for all signals.
 3. Open `ARMA_all_signals.ipynb` to detect anomalies on all signals.
 4. Open `ARMA.ipynb` to visualize ARMA anomaly detection on one signal.
+
+### X. Comparison
+1. Start a Jupyter server: `jupyter notebook`.
+2. Open `Comparison.ipynb` to compare the methods, both visually and metric-based.
