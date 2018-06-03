@@ -19,6 +19,16 @@ This folder contains code and data for detecting anomalies in a SCADA system. Fo
 3. Open `ARMA_all_signals.ipynb` to detect anomalies on all signals.
 4. Open `ARMA.ipynb` to visualize ARMA anomaly detection on one signal.
 
-### X. Comparison
+### 3. Discrete models
+
+1. Start a Jupyter server: `jupyter notebook`.
+2. Open `Discretization_SAX.ipynb` to detect anomalies on one signal.
+
+### 4. PCA
+
+1. Start a Jupyter server: `jupyter notebook`.
+2. Open `PCA analysis.ipynb` to detect anomalies on all signals.
+
+### 5. Comparison
 1. Start a Jupyter server: `jupyter notebook`.
 2. Open `Comparison.ipynb` to compare the methods, both visually and metric-based.
