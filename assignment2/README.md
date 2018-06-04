@@ -15,19 +15,21 @@ This folder contains code and data for detecting anomalies in a SCADA system. Fo
 ### 2. ARMA
 
 1. Start a Jupyter server: `jupyter notebook`.
-2. The script `nerdalize/arma_tuning.py` can be used to find optimal ARMA parameters for all signals.
+2. The script `nerdalize/arma_tuning.py` can be used to find optimal ARMA parameters for all signals(takes time).
 3. Open `ARMA_all_signals.ipynb` to detect anomalies on all signals.
 4. Open `ARMA.ipynb` to visualize ARMA anomaly detection on one signal.
 
 ### 3. Discrete models
 
 1. Start a Jupyter server: `jupyter notebook`.
-2. Open `Discretization_SAX.ipynb` to detect anomalies on one signal.
+2. The script `nerdalize/sax_tuning.py` can be used to find optimal parameters for all signals(takes time).
+3. Open `Discretization_SAX.ipynb` to detect anomalies on one signal.
 
 ### 4. PCA
 
 1. Start a Jupyter server: `jupyter notebook`.
-2. Open `PCA analysis.ipynb` to detect anomalies on all signals.
+2. The script `nerdalize/pca_tuning.py` can be used to find optimal PCA parameters(takes time).
+3. Open `PCA analysis.ipynb` to detect anomalies on all signals.
 
 ### 5. Comparison
 1. Start a Jupyter server: `jupyter notebook`.
